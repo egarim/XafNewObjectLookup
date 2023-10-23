@@ -28,7 +28,7 @@ namespace XafNewObjectLookup.Win.Controllers
         {
             InitializeComponent();
            
-    
+
             // Target required Views (via the TargetXXX properties) and create their Actions.
         }
 
@@ -38,13 +38,22 @@ namespace XafNewObjectLookup.Win.Controllers
             base.OnObjectCreated(newObject, objectSpace);
             if(newObject is Entity)
             {
-                ((Entity)newObject).EntityType = EntityType.Customer;
+                if (this.View.Id == "Entity_LookupListView_Customers")
+                {
+                    ((Entity)newObject).EntityType = EntityType.Customer;
+                    return;
+                }
+                if (this.View.Id == "Entity_LookupListView_Vendor")
+                {
+                    ((Entity)newObject).EntityType = EntityType.Vendor;
+                    return;
+                }
             }
         }
         protected override void OnActivated()
         {
             base.OnActivated();
-            if(this.View.Id== "Entity_LookupListView")
+            if(this.View.Id== "Entity_LookupListView_Customers")
             {
                 var EntityOption=this.NewObjectAction.Items.FirstOrDefault(i => i.Caption == "Entity");
                 var VendorOption = this.NewObjectAction.Items.FirstOrDefault(i => i.Caption == "Vendor");
@@ -53,7 +62,15 @@ namespace XafNewObjectLookup.Win.Controllers
                
                 
             }
-        
+            if (this.View.Id == "Entity_LookupListView_Vendor")
+            {
+                var EntityOption = this.NewObjectAction.Items.FirstOrDefault(i => i.Caption == "Entity");
+                var CustomerOption = this.NewObjectAction.Items.FirstOrDefault(i => i.Caption == "Customer");
+                this.NewObjectAction.Items.Remove(EntityOption);
+                this.NewObjectAction.Items.Remove(CustomerOption);
+
+
+            }
             // Perform various tasks depending on the target View.
         }
         protected override void OnViewControlsCreated()
