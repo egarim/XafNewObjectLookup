@@ -31,9 +31,16 @@ namespace XafNewObjectLookup.Win.Controllers
     
             // Target required Views (via the TargetXXX properties) and create their Actions.
         }
-  
 
-  
+
+        protected override void OnObjectCreated(object newObject, IObjectSpace objectSpace)
+        {
+            base.OnObjectCreated(newObject, objectSpace);
+            if(newObject is Entity)
+            {
+                ((Entity)newObject).EntityType = EntityType.Customer;
+            }
+        }
         protected override void OnActivated()
         {
             base.OnActivated();
@@ -43,6 +50,7 @@ namespace XafNewObjectLookup.Win.Controllers
                 var VendorOption = this.NewObjectAction.Items.FirstOrDefault(i => i.Caption == "Vendor");
                 this.NewObjectAction.Items.Remove(EntityOption);
                 this.NewObjectAction.Items.Remove(VendorOption);
+               
                 
             }
         
